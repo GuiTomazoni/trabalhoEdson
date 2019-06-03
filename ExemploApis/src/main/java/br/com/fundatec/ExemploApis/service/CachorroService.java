@@ -20,4 +20,8 @@ public class CachorroService {
 		super();
 		this.cachorroRepository = cachorroRepository;
 	}
+	
+	public Cachorro incluir(Cachorro cachorro) {
+		return cachorroRepository.save(cachorro);
+	}
 }

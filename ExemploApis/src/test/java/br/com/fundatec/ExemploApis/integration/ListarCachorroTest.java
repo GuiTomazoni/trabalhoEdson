@@ -27,12 +27,12 @@ public class ListarCachorroTest {
 	public void setUp() {
 		RestAssured.port = port;
 		RestAssured.baseURI = "http://localhost";
+		cachorroRepository.deleteAll();
 	}
 	
 	@Test
 	public void deveBuscarUmaListaDeCachorros() {
-		cachorroRepository.save(new Cachorro( "Goku", "Vira-lata", "Grande", 3));
-		
+		cachorroRepository.save(new Cachorro(null, "Goku", "Vira-lata", "Grande", 3));
 		RestAssured
 		.given()
 		.when()

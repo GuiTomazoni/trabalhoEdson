@@ -10,7 +10,7 @@ public class Cachorro {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
 	private String nome;
 	private String raca;
@@ -20,18 +20,18 @@ public Cachorro() {
 		
 	}
 	
-	public Cachorro(String nome, String raca, String porte, int idade) {
-//		this.id = id;
+	public Cachorro(Long id, String nome, String raca, String porte, int idade) {
+		this.id = id;
 		this.nome = nome;
 		this.raca = raca;
 		this.porte = porte;
 		this.idade = idade;
 	}
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

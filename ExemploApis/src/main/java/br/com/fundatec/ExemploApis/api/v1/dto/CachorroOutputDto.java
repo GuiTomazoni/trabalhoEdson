@@ -1,21 +1,31 @@
 package br.com.fundatec.ExemploApis.api.v1.dto;
 
-public class CachorroDto {
+public class CachorroOutputDto {
 	
+	private Long id;
 	private String nome;
 	private String raca;
 	private String porte;
 	private int idade;
 	
-	public CachorroDto() {
+	public CachorroOutputDto() {
 		
 	}
 	
-	public CachorroDto(String nome, String raca, String porte, int idade) {
+	public CachorroOutputDto(Long id, String nome, String raca, String porte, int idade) {
+		this.id = id;
 		this.nome = nome;
 		this.raca = raca;
 		this.porte = porte;
 		this.idade = idade;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNome() {
