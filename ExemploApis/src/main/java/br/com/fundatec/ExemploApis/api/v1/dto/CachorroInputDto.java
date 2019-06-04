@@ -8,6 +8,7 @@ public class CachorroInputDto {
 	@NotBlank(message = "O campo nome deve ser preenchido")
 	private String nome;
 	private String raca;
+	@Pattern(regexp = "^Pequeno|^Médio?|^Grande$", message = "Campo porte inválido")
 	private String porte;
 	private Integer idade;
 	@Pattern(regexp = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$", message = "Campo cpc inválido")
