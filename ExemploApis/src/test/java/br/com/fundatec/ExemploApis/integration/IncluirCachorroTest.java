@@ -15,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.fundatec.ExemploApis.entity.PorteParametro;
 import br.com.fundatec.ExemploApis.repository.CachorroRepository;
+import br.com.fundatec.ExemploApis.repository.PorteParametroRepository;
 import io.restassured.RestAssured;
 
 @RunWith(SpringRunner.class)
@@ -24,15 +26,20 @@ public class IncluirCachorroTest {
 
 	@LocalServerPort
 	private int port;
-	
 	@Autowired
 	private CachorroRepository cachorroRepository;
+	@Autowired
+	private PorteParametroRepository porteParametroRepository;
 	
 	@Before
 	public void setup() {
 		RestAssured.port = port;
 		RestAssured.baseURI = "http://localhost";
 		cachorroRepository.deleteAll();
+		porteParametroRepository.deleteAll();
+		porteParametroRepository.save(new PorteParametro("Pequeno"));
+		porteParametroRepository.save(new PorteParametro("Médio"));
+		porteParametroRepository.save(new PorteParametro("Grande"));
 	}
 	
 	@Test
@@ -108,7 +115,7 @@ public class IncluirCachorroTest {
 	}
 	
 	@Test
-	public void deveValidarPorteDeCachorro() {
+	public void deveValidarPorteInvalido() {
 		RestAssured
 		.given()
 		.header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
@@ -124,8 +131,8 @@ public class IncluirCachorroTest {
 		.post("/v1/cachorros")
 		.then()
 		.assertThat()
-		.statusCode(HttpStatus.BAD_REQUEST.value())
-		.body("errors[0].defaultMessage", Matchers.equalTo("Campo porte inválido"));
+		.statusCode(HttpStatus.EXPECTATION_FAILED.value())
+		.body("mensagem", Matchers.equalTo("Porte inválido. Porte deve ser Pequeno, Médio ou Grande"));
 		
 		Assert.assertTrue(cachorroRepository.count() == 0);
 	}

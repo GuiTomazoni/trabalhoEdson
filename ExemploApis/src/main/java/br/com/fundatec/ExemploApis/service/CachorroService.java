@@ -9,19 +9,31 @@ import br.com.fundatec.ExemploApis.repository.CachorroRepository;
 
 @Service
 public class CachorroService {
-	
+
 	private CachorroRepository cachorroRepository;
-	
-	public List<Cachorro> listarTodos(){
+	private PorteParametroService porteParametroService;
+
+	public CachorroService(CachorroRepository cachorroRepository, PorteParametroService porteParametroService) {
+		this.cachorroRepository = cachorroRepository;
+		this.porteParametroService = porteParametroService;
+	}
+
+	public List<Cachorro> listarTodos() {
 		return (List<Cachorro>) cachorroRepository.findAll();
 	}
 
-	public CachorroService(CachorroRepository cachorroRepository) {
-		super();
-		this.cachorroRepository = cachorroRepository;
-	}
-	
 	public Cachorro incluir(Cachorro cachorro) {
+		validarSalvarCachorro(cachorro);
 		return cachorroRepository.save(cachorro);
+	}
+
+	public void validarSalvarCachorro(Cachorro cachorro) {
+		validarPorte(cachorro);
+	}
+
+	public void validarPorte(Cachorro cachorro) {
+		if (!porteParametroService.porteValido(cachorro.getPorte())) {
+			throw new IllegalArgumentException("Porte inválido. Porte deve ser Pequeno, Médio ou Grande");
+		}
 	}
 }
