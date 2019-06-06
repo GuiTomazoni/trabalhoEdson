@@ -22,7 +22,7 @@ public class CachorroService {
 		return (List<Cachorro>) cachorroRepository.findAll();
 	}
 
-	public Cachorro incluir(Cachorro cachorro) {
+	public Cachorro salvar(Cachorro cachorro) {
 		validarSalvarCachorro(cachorro);
 		return cachorroRepository.save(cachorro);
 	}
