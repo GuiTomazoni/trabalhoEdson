@@ -2,6 +2,7 @@ package br.com.fundatec.ExemploApis.api.v1.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 
 public class CachorroInputDto {
 
@@ -9,6 +10,7 @@ public class CachorroInputDto {
 	private String nome;
 	private String raca;
 	private String porte;
+	@PositiveOrZero(message = "A idade deve ser maior ou igual a zero")
 	private Integer idade;
 	@Pattern(regexp = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$", message = "Campo cpc inválido")
 	private String cpc;

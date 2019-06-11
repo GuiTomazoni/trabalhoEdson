@@ -1,6 +1,9 @@
 package br.com.fundatec.ExemploApis.service;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,21 @@ public class PorteParametroService {
 			}
 		}
 		return false;
+	}
+	
+	public boolean racasComPortesDefinidos(String raca, String porte) {
+		Map<String, List<String>> mapaPorteRaca = new HashMap<>();
+		mapaPorteRaca.put("Pequeno", Arrays.asList("Poodle", "Chuaua", "Vira-Latas", "Beagle"));
+		mapaPorteRaca.put("Médio", Arrays.asList("Chow chow", "Vira-Latas"));
+		mapaPorteRaca.put("Grande", Arrays.asList("Pastor Belga", "Vira-Latas"));
+		
+		List<String> racas = mapaPorteRaca.get(porte);
+		
+		if(racas == null) {
+			throw new IllegalArgumentException("Não existem raças para este porte");
+		}
+		
+		return racas.contains(raca);		
 	}
 
 }

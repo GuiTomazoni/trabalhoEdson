@@ -136,4 +136,50 @@ public class IncluirCachorroTest {
 		
 		Assert.assertTrue(cachorroRepository.count() == 0);
 	}
+	
+	@Test
+	public void deveValidarIdadeInvalida() {
+		RestAssured
+		.given()
+		.header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+		.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+		.body("{" +  
+				"   \"nome\": \"Urso\"," +
+				"	\"raca\": \"Pastor Belga\"," + 
+				"	\"porte\": \"Grande\"," + 
+				"	\"idade\": -2," +
+				"   \"cpc\": \"012.345.678-90\" " +
+				"}")
+		.when()
+		.post("/v1/cachorros")
+		.then()
+		.assertThat()
+		.statusCode(HttpStatus.BAD_REQUEST.value())
+		.body("errors[0].defaultMessage", Matchers.equalTo("A idade deve ser maior ou igual a zero"));
+		
+		Assert.assertTrue(cachorroRepository.count() == 0);
+	}
+	
+	@Test
+	public void deveValidarPorteComRacaInvalida() {
+		RestAssured
+		.given()
+		.header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
+		.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+		.body("{" +  
+				"   \"nome\": \"Urso\"," +
+				"	\"raca\": \"Pastor Belga\"," + 
+				"	\"porte\": \"Médio\"," + 
+				"	\"idade\": 2," +
+				"   \"cpc\": \"012.345.678-90\" " +
+				"}")
+		.when()
+		.post("/v1/cachorros")
+		.then()
+		.assertThat()
+		.statusCode(HttpStatus.EXPECTATION_FAILED.value())
+		.body("mensagem", Matchers.equalTo("Não existem raças para este porte"));
+		
+		Assert.assertTrue(cachorroRepository.count() == 0);
+	}
 }

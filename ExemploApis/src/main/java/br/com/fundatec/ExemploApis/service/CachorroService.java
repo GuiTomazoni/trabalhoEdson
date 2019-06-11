@@ -2,6 +2,8 @@ package br.com.fundatec.ExemploApis.service;
 
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.stereotype.Service;
 
 import br.com.fundatec.ExemploApis.entity.Cachorro;
@@ -29,11 +31,24 @@ public class CachorroService {
 
 	public void validarSalvarCachorro(Cachorro cachorro) {
 		validarPorte(cachorro);
+		validarPorteRaca(cachorro);
+	}
+
+	private void validarPorteRaca(Cachorro cachorro) {
+		if(!porteParametroService.racasComPortesDefinidos(cachorro.getRaca(), cachorro.getPorte())) {
+			throw new IllegalArgumentException("Não existem raças para este porte");
+		}
+		
 	}
 
 	public void validarPorte(Cachorro cachorro) {
 		if (!porteParametroService.porteValido(cachorro.getPorte())) {
 			throw new IllegalArgumentException("Porte inválido. Porte deve ser Pequeno, Médio ou Grande");
 		}
+	}
+
+	public Cachorro consultar(Long id) {
+		return cachorroRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Não encontrou cachorro para o id:" + id));
 	}
 }
