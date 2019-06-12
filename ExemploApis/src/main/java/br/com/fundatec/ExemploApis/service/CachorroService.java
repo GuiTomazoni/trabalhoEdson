@@ -35,10 +35,10 @@ public class CachorroService {
 	}
 
 	private void validarPorteRaca(Cachorro cachorro) {
-		if(!porteParametroService.racasComPortesDefinidos(cachorro.getRaca(), cachorro.getPorte())) {
+		if (!porteParametroService.racasComPortesDefinidos(cachorro.getRaca(), cachorro.getPorte())) {
 			throw new IllegalArgumentException("Não existem raças para este porte");
 		}
-		
+
 	}
 
 	public void validarPorte(Cachorro cachorro) {
@@ -50,5 +50,13 @@ public class CachorroService {
 	public Cachorro consultar(Long id) {
 		return cachorroRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Não encontrou cachorro para o id:" + id));
+	}
+
+	public void excluir(Long id) {
+		if (cachorroRepository.existsById(id)) {
+			cachorroRepository.deleteById(id);
+		} else {
+			throw new IllegalArgumentException("Não existe cachorro com este id: " + id);
+		}
 	}
 }
