@@ -34,6 +34,18 @@ public class CachorroController {
 		this.cachorroMapper = cachorroMapper;
 		this.cachorroService = cachorroService;
 	}
+	
+	@GetMapping("/v1/cachorros/{id}")
+	public ResponseEntity<?> consultarCachorro(@PathVariable Long id){
+		try {
+			Cachorro cachorro = cachorroService.consultar(id);
+			CachorroOutputDto cachorroOutputDto = cachorroMapper.mapearCachorroOutputDto(cachorro);
+			return ResponseEntity.ok(cachorroOutputDto);
+		} catch (IllegalArgumentException e) {
+			ErroDto erroDto = new ErroDto(e.getMessage());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erroDto);
+		}
+	}
 
 	@GetMapping("/v1/cachorros")
 	public ResponseEntity<List<CachorroOutputDto>> getCachorros(){		
