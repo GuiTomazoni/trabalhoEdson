@@ -14,8 +14,14 @@ public class CachorroInputDto {
 	private Integer idade;
 	@Pattern(regexp = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$", message = "Campo cpc inválido")
 	private String cpc;
-	
-	
+	private Long idPessoa;
+
+	public Long getIdPessoa() {
+		return idPessoa;
+	}
+	public void setIdPessoa(Long idPessoa) {
+		this.idPessoa = idPessoa;
+	}
 	public String getNome() {
 		return nome;
 	}

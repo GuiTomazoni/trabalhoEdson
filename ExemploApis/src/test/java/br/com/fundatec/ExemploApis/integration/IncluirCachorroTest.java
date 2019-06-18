@@ -2,6 +2,8 @@ package br.com.fundatec.ExemploApis.integration;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
+import java.util.List;
+
 import org.apache.http.HttpHeaders;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -15,8 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import br.com.fundatec.ExemploApis.entity.Cachorro;
+import br.com.fundatec.ExemploApis.entity.Pessoa;
 import br.com.fundatec.ExemploApis.entity.PorteParametro;
 import br.com.fundatec.ExemploApis.repository.CachorroRepository;
+import br.com.fundatec.ExemploApis.repository.PessoaRepository;
 import br.com.fundatec.ExemploApis.repository.PorteParametroRepository;
 import io.restassured.RestAssured;
 
@@ -30,6 +35,9 @@ public class IncluirCachorroTest {
 	private CachorroRepository cachorroRepository;
 	@Autowired
 	private PorteParametroRepository porteParametroRepository;
+	@Autowired
+	private PessoaRepository pessoaRepository;
+	private Pessoa pessoa;
 	
 	@Before
 	public void setup() {
@@ -40,6 +48,7 @@ public class IncluirCachorroTest {
 		porteParametroRepository.save(new PorteParametro("Pequeno"));
 		porteParametroRepository.save(new PorteParametro("Médio"));
 		porteParametroRepository.save(new PorteParametro("Grande"));
+		pessoa = pessoaRepository.save(new Pessoa(null, "Alberto", 16));
 	}
 	
 	@Test
@@ -53,7 +62,8 @@ public class IncluirCachorroTest {
 					"	\"raca\": \"Pastor Belga\"," + 
 					"	\"porte\": \"Grande\"," + 
 					"	\"idade\": 2," +
-					"   \"cpc\": \"012.345.678-90\" " +
+					"   \"cpc\": \"012.345.678-90\", " +
+					"   \"idPessoa\": " + pessoa.getId() +
 					"}")
 			.when()
 			.post("/v1/cachorros")
@@ -67,6 +77,11 @@ public class IncluirCachorroTest {
 			.statusCode(HttpStatus.CREATED.value());
 		
 		Assert.assertTrue(cachorroRepository.count() > 0);
+		Cachorro cachorroIncluido = ((List<Cachorro>) cachorroRepository.findAll()).get(0);
+		Assert.assertNotNull(cachorroIncluido.getPessoa());
+		Assert.assertEquals("Urso", cachorroIncluido.getNome());
+		Assert.assertEquals("Pastor Belga", cachorroIncluido.getRaca());
+		Assert.assertEquals(2, cachorroIncluido.getIdade());
 	}
 	
 	@Test

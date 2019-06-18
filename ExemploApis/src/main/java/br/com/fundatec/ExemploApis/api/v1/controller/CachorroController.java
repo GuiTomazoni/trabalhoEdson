@@ -21,18 +21,22 @@ import br.com.fundatec.ExemploApis.api.v1.dto.ErroDto;
 import br.com.fundatec.ExemploApis.api.v1.dto.CachorroAlterarIdadeDto;
 import br.com.fundatec.ExemploApis.api.v1.dto.CachorroInputDto;
 import br.com.fundatec.ExemploApis.entity.Cachorro;
+import br.com.fundatec.ExemploApis.entity.Pessoa;
 import br.com.fundatec.ExemploApis.mapper.CachorroMapper;
 import br.com.fundatec.ExemploApis.service.CachorroService;
+import br.com.fundatec.ExemploApis.service.PessoaService;
 
 @RestController
 public class CachorroController {
 	
 	private CachorroService cachorroService;
 	private CachorroMapper cachorroMapper;
+	private PessoaService pessoaService;
 	
-	public CachorroController(CachorroService cachorroService, CachorroMapper cachorroMapper) {
+	public CachorroController(CachorroService cachorroService, CachorroMapper cachorroMapper, PessoaService pessoaService) {
 		this.cachorroMapper = cachorroMapper;
 		this.cachorroService = cachorroService;
+		this.pessoaService = pessoaService;
 	}
 	
 	@GetMapping("/v1/cachorros/{id}")
@@ -58,6 +62,10 @@ public class CachorroController {
 	public ResponseEntity<?> incluirCachorro(@Valid @RequestBody CachorroInputDto cachorroInputDto){
 		try {
 			Cachorro cachorro = cachorroMapper.mapearCachorro(cachorroInputDto);
+			if(cachorroInputDto.getIdPessoa() != null) {
+				Pessoa pessoa = pessoaService.consultar(cachorroInputDto.getIdPessoa());
+				cachorro.setPessoa(pessoa);
+			}
 			cachorro = cachorroService.salvar(cachorro);
 			CachorroOutputDto cachorroOutputDto = cachorroMapper.mapearCachorroOutputDto(cachorro);
 			return ResponseEntity.status(HttpStatus.CREATED).body(cachorroOutputDto);
