@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fundatec.ExemploApis.api.v1.dto.CachorroOutputDto;
@@ -52,8 +53,8 @@ public class CachorroController {
 	}
 
 	@GetMapping("/v1/cachorros")
-	public ResponseEntity<List<CachorroOutputDto>> getCachorros(){		
-		List<Cachorro> listaCachorro = cachorroService.listarTodos();
+	public ResponseEntity<List<CachorroOutputDto>> getCachorros(@RequestParam(defaultValue = "") String nome){		
+		List<Cachorro> listaCachorro = cachorroService.listar(nome);
 		List<CachorroOutputDto> listaCachorroDto = cachorroMapper.mapearListaCachorroOutputDto(listaCachorro);
 		return ResponseEntity.status(HttpStatus.OK).body(listaCachorroDto);		
 	}

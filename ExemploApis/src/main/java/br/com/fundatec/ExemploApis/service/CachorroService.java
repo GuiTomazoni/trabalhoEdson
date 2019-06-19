@@ -2,8 +2,6 @@ package br.com.fundatec.ExemploApis.service;
 
 import java.util.List;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.stereotype.Service;
 
 import br.com.fundatec.ExemploApis.entity.Cachorro;
@@ -20,8 +18,8 @@ public class CachorroService {
 		this.porteParametroService = porteParametroService;
 	}
 
-	public List<Cachorro> listarTodos() {
-		return (List<Cachorro>) cachorroRepository.findAll();
+	public List<Cachorro> listar(String nome) {
+		return cachorroRepository.findByNomeContainingIgnoringCase(nome);
 	}
 
 	public Cachorro salvar(Cachorro cachorro) {
